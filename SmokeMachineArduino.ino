@@ -69,7 +69,7 @@ void role(String input){
       if(loaded_pel == 0)
         Serial.println("No Pellets to load");
       else if(loaded_pel == 1){
-        Serial.println("Loading failed, only one pellet loaded");
+        Serial.println("Warning: Loading failed, only one pellet loaded");
         loaded_fl = true;
         empty_rail = true;
       }
@@ -114,10 +114,10 @@ void role(String input){
       Serial.println("Burning Completed");
       smoker.moveWheel();
       loaded_fl = false;
-      Serial.println("Machine is now empty, please re-load machine");
+      Serial.println("Warning: Machine is now empty, please re-load machine");
     }
     else{
-      Serial.println("Failed to burn, Machine is empty. Please re-load machine");
+      Serial.println("Error: Failed to burn, Machine is empty. Please re-load machine");
     }
   }
 
@@ -126,10 +126,10 @@ void role(String input){
   else if(comm == "empty\n"){
     smoker.moveWheel();
     smoker.moveWheel();
-    Serial.println("Machine has been empted of all pellets");
+    Serial.println("Warning: Machine has been empted of all pellets");
     loaded_fl = false;
     if(!(smoker.scanLA())){
-      Serial.println("Rail is empty");
+      Serial.println("Warning: Rail is empty");
       empty_rail = true;
     }
     else if(smoker.scanLA()){
@@ -141,7 +141,7 @@ void role(String input){
 /************Unknown Command Return************************/
   
   else{
-    Serial.println("unknown command, please try again");
+    Serial.println("Warning: unknown command, please try again");
   }
 }
 
