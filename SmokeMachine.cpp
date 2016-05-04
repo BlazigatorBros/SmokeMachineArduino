@@ -11,6 +11,7 @@ LA-FB-Out:          HIGH = LA down or rising            LOW = LA up or falling
 Data#-Out:          HIGH = slot ready to recieve        LOW = slot moving in motion
 Fan_FB-Out:         Fan tachyometer out
 */
+
 #include "Arduino.h"
 #include "SmokeMachine.h"
 
@@ -67,6 +68,7 @@ int SmokeMachine::getPos() {
     if(digitalRead(_slot1Pin)) return 1;
     else if(digitalRead(_slot2Pin)) return 2;
     else if(digitalRead(_slot3Pin)) return 3;
+    else return 0;
 } 
 
 void SmokeMachine::moveWheel() {
@@ -94,8 +96,13 @@ void SmokeMachine::moveWheel() {
 }
 
 void SmokeMachine::ignition(bool ignit) {
-    if(ignit) digitalWrite(_ignitionPin, HIGH);
-    else digitalWrite(_ignitionPin,LOW);
+  if(ignit) digitalWrite(_ignitionPin, HIGH);
+  else digitalWrite(_ignitionPin,LOW);
+}
+
+void SmokeMachine::fanCtrl(bool Fan_Ctrl) {
+  if(Fan_Ctrl) digitalWrite(_fanCtrlPin, HIGH);
+  else digitalWrite(_fanCtrlPin, LOW);
 }
 
 bool SmokeMachine::scanLA() {

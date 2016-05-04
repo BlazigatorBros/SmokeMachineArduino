@@ -18,13 +18,15 @@ class SmokeMachine
     bool scanLA();
     
     int standbyInit();
+    int getPos();
     
     void moveWheel();
     void clampRound(bool dir);
     void ignition(bool ignit);
+    void fanCtrl(bool Fan_Ctrl);
     void burnRoundnRot();
     void rotWheel();
-
+    
   private:
     int _burnTime;
     int _wheelEnPin;
@@ -42,7 +44,7 @@ class SmokeMachine
     int _loaderDirPin;
 
     void initialize();
-    int getPos();
+    
     void raiseLA();
 //    void clampRound(bool dir);
 };

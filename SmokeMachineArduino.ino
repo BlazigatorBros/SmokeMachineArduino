@@ -8,10 +8,10 @@ monitor other conditions.
 Ideally, the machine in it's stand-by state will already have a 
 pellet loaded into it, waiting to be clamped and burned.  The 
 break-beams that makes sure that there is a pellet ready to be
-loaded should be interrupt driven.  All functions (clamping,
-loading, igniting, etc) should all have their own functions for 
-simplicity, but the serial command will call one function that
-utliizes all of the other functions accordingly.
+loaded should be interrupt driven (FALSE, turned out to cause problems).  
+All functions (clamping, loading, igniting, etc) should all have 
+their own functions for simplicity, but the serial command will 
+call one function that utliizes all of the other functions accordingly.
 */
 
 /***************************************************************
@@ -47,6 +47,9 @@ int emp_fl = 0;
 void setup(){
   Serial.begin(9600);
   inputString.reserve(200);
+  while(smoker.getPos() == 0){    //This loop will run until it detects the smoke machine
+  }                               //Once smoke machine found, breaks loop and turns on fan
+  smoker.fanCtrl(true);           //May need to change this to a serial signal from main arduino instead
 }
 
 void loop(){
@@ -60,16 +63,16 @@ void loop(){
 void role(String input){
   String comm = getValue(input, ' ', 0);
 
-/**************Setup Command*********************/
+/**************Load Command*********************/
   
-  if(comm == "setup\n"){
+  if(comm == "load\n"){
     if(loaded_fl == false){
       Serial.println("Loading Machine");
       loaded_pel = smoker.standbyInit();
       if(loaded_pel == 0)
         Serial.println("No Pellets to load");
       else if(loaded_pel == 1){
-        Serial.println("Loading failed, only one pellet loaded");
+        Serial.println("Warning: Loading failed, only one pellet loaded");
         loaded_fl = true;
         empty_rail = true;
       }
@@ -114,10 +117,10 @@ void role(String input){
       Serial.println("Burning Completed");
       smoker.moveWheel();
       loaded_fl = false;
-      Serial.println("Machine is now empty, please re-load machine");
+      Serial.println("Warning: Machine is now empty, please re-load machine");
     }
     else{
-      Serial.println("Failed to burn, Machine is empty. Please re-load machine");
+      Serial.println("Error: Failed to burn, Machine is empty. Please re-load machine");
     }
   }
 
@@ -126,10 +129,10 @@ void role(String input){
   else if(comm == "empty\n"){
     smoker.moveWheel();
     smoker.moveWheel();
-    Serial.println("Machine has been empted of all pellets");
+    Serial.println("Warning: Machine has been emptied of all pellets");
     loaded_fl = false;
     if(!(smoker.scanLA())){
-      Serial.println("Rail is empty");
+      Serial.println("Warning: Rail is empty");
       empty_rail = true;
     }
     else if(smoker.scanLA()){
@@ -141,7 +144,7 @@ void role(String input){
 /************Unknown Command Return************************/
   
   else{
-    Serial.println("unknown command, please try again");
+    Serial.println("Warning: Unknown Command");
   }
 }
 
