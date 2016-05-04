@@ -70,7 +70,7 @@ void role(String input){
       Serial.println("Loading Machine");
       loaded_pel = smoker.standbyInit();
       if(loaded_pel == 0)
-        Serial.println("No Pellets to load");
+        Serial.println("Warning: No Pellets to load");
       else if(loaded_pel == 1){
         Serial.println("Warning: Loading failed, only one pellet loaded");
         loaded_fl = true;
@@ -90,7 +90,7 @@ void role(String input){
       }
     }
     else
-      Serial.println("Error: Machine is not Empty");
+      Serial.println("Warning: Pellets already loaded, doing nothing");
   }
 
 /*****************Burn Command*********************/
@@ -107,7 +107,7 @@ void role(String input){
       }
       else
       {
-        Serial.println("Rail is Empty");
+        Serial.println("Warning: Rail is Empty");
         empty_rail = true;
       } 
     }
