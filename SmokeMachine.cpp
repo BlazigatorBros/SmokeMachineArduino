@@ -72,7 +72,8 @@ int SmokeMachine::getPos() {
 } 
 
 void SmokeMachine::moveWheel() {
-
+    clampRound(false);
+    delay(500);
     int nextPos = 0;
     int currentPos = getPos();
     if (currentPos == 3) nextPos = 1;
@@ -82,17 +83,23 @@ void SmokeMachine::moveWheel() {
         digitalWrite(_wheelMovePin,LOW);
     }  
     digitalWrite(_wheelMovePin,HIGH);
-
     while(getPos() != nextPos);
+    delay(500);
+    clampRound(true);
+}
 
-/*
+void SmokeMachine::Empty() {
+    clampRound(false);
+    delay(500);
+    int nextPos = 0;
     int currentPos = getPos();
+    if (currentPos == 3) nextPos = 1;
+    else nextPos = currentPos + 1;
     while(getPos() == currentPos) {
         digitalWrite(_wheelMovePin,LOW);
     }  
     digitalWrite(_wheelMovePin,HIGH);
-    while((getPos() != (currentPos + 1)) || (getPos() != (currentPos - 2)));
-*/
+    while(getPos() != nextPos);
 }
 
 void SmokeMachine::ignition(bool ignit) {
@@ -135,12 +142,14 @@ int SmokeMachine::standbyInit() {
         raiseLA();
         moveWheel();
         delay(1000);
+        clampRound(true);
         if(digitalRead(_loaderIRPin) == 1) return 1;
         else
         {
           raiseLA();
           return 2;
         }
+        
     }
 }
 
@@ -157,25 +166,26 @@ void SmokeMachine::rotWheel() {
 void SmokeMachine::burnRoundnRot() {
     
     //if(loadRound()) {
-    clampRound(true);
+    //clampRound(true);
     ignition(true);
     delay(_burnTime);
     ignition(false);
-    delay(_burnTime);
+    delay(1000);
     clampRound(false);
     delay(500);
     moveWheel();
     delay(1000);
+    clampRound(true);
 }
 
 void SmokeMachine::burnRound() {
     
     //if(loadRound()) {
-    clampRound(true);
+    //clampRound(true);
     ignition(true);
     delay(_burnTime);
     ignition(false);
-    delay(_burnTime);
+    delay(1000);
     clampRound(false);
     delay(500);
 }

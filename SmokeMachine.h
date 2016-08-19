@@ -7,7 +7,6 @@
 #include "WProgram.h"
 #endif
 
-
 class SmokeMachine
 {
   public:
@@ -19,7 +18,8 @@ class SmokeMachine
     
     int standbyInit();
     int getPos();
-    
+
+    void Empty();
     void moveWheel();
     void clampRound(bool dir);
     void ignition(bool ignit);
